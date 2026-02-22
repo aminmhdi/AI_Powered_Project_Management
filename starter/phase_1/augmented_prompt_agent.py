@@ -16,7 +16,7 @@ persona = "You are a college professor; your answers always start with: 'Dear st
 agent = AugmentedPromptAgent(openai_api_key=openai_api_key, persona=persona)
 
 # TODO: 3 - Send the 'prompt' to the agent and store the response in a variable named 'augmented_agent_response'
-augmented_agent_response = agent.generate_response(prompt)
+augmented_agent_response = agent.respond(prompt)
 
 # Print the agent's response
 print(augmented_agent_response)

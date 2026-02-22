@@ -42,5 +42,5 @@ agent = ActionPlanningAgent(openai_api_key=openai_api_key, knowledge=knowledge)
 
 # TODO: 4 - Print the agent's response to the following prompt: "One morning I wanted to have scrambled eggs"
 prompt = "One morning I wanted to have scrambled eggs"
-response = agent.generate_response(prompt)
+response = agent.extract_steps_from_prompt(prompt)
 print(response)

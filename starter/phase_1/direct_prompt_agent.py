@@ -16,7 +16,7 @@ prompt = "What is the Capital of France?"
 # TODO: 3 - Instantiate the DirectPromptAgent as direct_agent
 direct_agent = DirectPromptAgent(openai_api_key=openai_api_key)
 # TODO: 4 - Use direct_agent to send the prompt defined above and store the response
-direct_agent_response = direct_agent.generate_response(prompt)
+direct_agent_response = direct_agent.respond(prompt)
 
 # Print the response from the agent
 print(direct_agent_response)
