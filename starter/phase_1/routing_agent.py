@@ -2,6 +2,7 @@
 # TODO: 1 - Import the KnowledgeAugmentedPromptAgent and RoutingAgent
 import os
 from dotenv import load_dotenv
+from workflow_agents.base_agents import KnowledgeAugmentedPromptAgent, RoutingAgent
 
 # Load environment variables from .env file
 load_dotenv()
@@ -12,30 +13,36 @@ persona = "You are a college professor"
 
 knowledge = "You know everything about Texas"
 # TODO: 2 - Define the Texas Knowledge Augmented Prompt Agent
+texas_agent = KnowledgeAugmentedPromptAgent(openai_api_key=openai_api_key, persona=persona, knowledge=knowledge)
 
 knowledge = "You know everything about Europe"
 # TODO: 3 - Define the Europe Knowledge Augmented Prompt Agent
+europe_agent = KnowledgeAugmentedPromptAgent(openai_api_key=openai_api_key, persona=persona, knowledge=knowledge)
 
 persona = "You are a college math professor"
 knowledge = "You know everything about math, you take prompts with numbers, extract math formulas, and show the answer without explanation"
 # TODO: 4 - Define the Math Knowledge Augmented Prompt Agent
+math_agent = KnowledgeAugmentedPromptAgent(openai_api_key=openai_api_key, persona=persona, knowledge=knowledge)
 
 routing_agent = RoutingAgent(openai_api_key, {})
 agents = [
     {
         "name": "texas agent",
         "description": "Answer a question about Texas",
-        "func": lambda x: # TODO: 5 - Call the Texas Agent to respond to prompts
+        # TODO: 5 - Call the Texas Agent to respond to prompts
+        "func": lambda x: texas_agent.generate_response(x) 
     },
     {
         "name": "europe agent",
         "description": "Answer a question about Europe",
-        "func": # TODO: 6 - Define a function to call the Europe Agent
+        # TODO: 6 - Define a function to call the Europe Agent
+        "func": lambda x: europe_agent.generate_response(x)
     },
     {
         "name": "math agent",
         "description": "When a prompt contains numbers, respond with a math formula",
         # TODO: 7 - Define a function to call the Math Agent
+        "func": lambda x: math_agent.generate_response(x)
     }
 ]
 
@@ -45,3 +52,11 @@ routing_agent.agents = agents
 #           - "Tell me about the history of Rome, Texas"
 #           - "Tell me about the history of Rome, Italy"
 #           - "One story takes 2 days, and there are 20 stories"
+print("Response to 'Tell me about the history of Rome, Texas':")
+print(routing_agent.route_prompt("Tell me about the history of Rome, Texas"))
+
+print("\nResponse to 'Tell me about the history of Rome, Italy':")
+print(routing_agent.route_prompt("Tell me about the history of Rome, Italy"))
+
+print("\nResponse to 'One story takes 2 days, and there are 20 stories':")
+print(routing_agent.route_prompt("One story takes 2 days, and there are 20 stories"))

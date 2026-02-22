@@ -7,10 +7,8 @@ import uuid
 from datetime import datetime
 from openai import OpenAI
 
-
 # DirectPromptAgent class definition
 class DirectPromptAgent:
-    
     def __init__(self, openai_api_key):
         # Initialize the agent
         # TODO: 2 - Define an attribute named openai_api_key to store the OpenAI API key provided to this class.
@@ -232,7 +230,6 @@ class RAGKnowledgePromptAgent:
         return response.choices[0].message.content
 
 class EvaluationAgent:
-    
     def __init__(self, openai_api_key, persona, evaluation_criteria, worker_agent, max_interactions):
         # Initialize the EvaluationAgent with given attributes.
         # TODO: 1 - Declare class attributes here
@@ -310,7 +307,6 @@ class EvaluationAgent:
         }   
 
 class RoutingAgent():
-
     def __init__(self, openai_api_key, agents):
         # Initialize the agent with given attributes
         self.openai_api_key = openai_api_key
@@ -358,7 +354,6 @@ class RoutingAgent():
 
 
 class ActionPlanningAgent:
-
     def __init__(self, openai_api_key, knowledge):
         # TODO: 1 - Initialize the agent attributes here
         self.openai_api_key = openai_api_key
