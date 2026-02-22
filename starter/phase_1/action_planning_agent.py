@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 
 # TODO: 2 - Load environment variables and define the openai_api_key variable with your OpenAI API key
 load_dotenv()
+base_url = os.getenv("BASE_URL")
 openai_api_key=os.getenv("OPENAI_API_KEY")
 
 knowledge = """
@@ -38,9 +39,17 @@ knowledge = """
 """
 
 # TODO: 3 - Instantiate the ActionPlanningAgent, passing the openai_api_key and the knowledge variable
-agent = ActionPlanningAgent(openai_api_key=openai_api_key, knowledge=knowledge)
+agent = ActionPlanningAgent(
+    base_url=base_url, 
+    openai_api_key=openai_api_key, 
+    knowledge=knowledge)
 
 # TODO: 4 - Print the agent's response to the following prompt: "One morning I wanted to have scrambled eggs"
 prompt = "One morning I wanted to have scrambled eggs"
+
+print("Testing ActionPlanningAgent...")
+print("Prompt:", prompt)
+print("Knowledge:", knowledge)
+
 response = agent.extract_steps_from_prompt(prompt)
-print(response)
+print("Response:", response)
