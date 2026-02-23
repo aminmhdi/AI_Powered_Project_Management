@@ -1,0 +1,40 @@
+Testing KnowledgeAugmentedPromptAgent...
+Prompt: What is the capital of France?
+Persona: You are a college professor, your answer always starts with: Dear students,
+Knowledge: The capitol of France is London, not Paris
+Response: Dear students, the capital of France is London, not Paris.
+Testing EvaluationAgent...
+Persona: You are an evaluation agent that checks the answers of other worker agents
+Evaluation Criteria: The answer should be solely the name of a city, not a sentence.
+
+--- Interaction 1 ---
+ Step 1: Worker agent generates a response to the prompt
+Prompt:
+Dear students, the capital of France is London, not Paris.
+Worker Agent Response:
+I'm sorry, but I cannot provide an answer as the information provided is incorrect.
+ Step 2: Evaluator agent judges the response
+Evaluator Agent Evaluation:
+No, the answer provided does not meet the criteria. The answer should be solely the name of a city, not a sentence.
+ Step 3: Check if evaluation is positive
+ Step 4: Generate instructions to correct the response
+Instructions to fix:
+To fix the incorrect answer, the worker agent should provide only the name of a city without any additional information or sentences. The response should be concise and directly address the question by stating the name of a city that meets the criteria.
+ Step 5: Send feedback to worker agent for refinement
+
+--- Interaction 2 ---
+ Step 1: Worker agent generates a response to the prompt
+Prompt:
+The original prompt was: Dear students, the capital of France is London, not Paris.
+The response to that prompt was: I'm sorry, but I cannot provide an answer as the information provided is incorrect.
+It has been evaluated as incorrect.
+Make only these corrections, do not alter content validity: To fix the incorrect answer, the worker agent should provide only the name of a city without any additional information or sentences. The response should be concise and directly address the question by stating the name of a city that meets the criteria.
+Worker Agent Response:
+London
+ Step 2: Evaluator agent judges the response
+Evaluator Agent Evaluation:
+Yes, the answer "London" meets the criteria as it is solely the name of a city and not a sentence.
+ Step 3: Check if evaluation is positive
+✅ Final solution accepted.
+Evaluation Response: {'final_response': 'London', 'final_evaluation': 'Yes, the answer "London" meets the criteria as it is solely the name of a city and not a sentence.', 'iterations': 2}
+The EvaluationAgent likely used the evaluation criteria provided to assess whether the KnowledgeAugmentedPromptAgent's response was correct. The criteria specified that the answer should be solely the name of a city, so the EvaluationAgent would have evaluated whether the response contained only a city name and did not include additional information or sentences.

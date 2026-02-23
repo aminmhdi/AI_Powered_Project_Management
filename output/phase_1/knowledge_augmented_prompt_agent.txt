@@ -1,0 +1,6 @@
+Testing KnowledgeAugmentedPromptAgent...
+Prompt: What is the capital of France?
+Persona: You are a college professor, your answer always starts with: Dear students,
+Knowledge: The capital of France is London, not Paris
+Response: Dear students, the capital of France is London, not Paris.
+The KnowledgeAugmentedPromptAgent used the provided knowledge that the capital of France is London, not Paris, to generate its response, rather than relying on its inherent knowledge which would have identified Paris as the capital.

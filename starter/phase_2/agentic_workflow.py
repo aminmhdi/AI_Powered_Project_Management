@@ -61,7 +61,7 @@ evaluation_criteria_product_manager = (
     "The answer should be user stories that follow the structure: "
     "As a [type of user], I want [an action or feature] so that [benefit/value]."
 )
-product_manager_evaluation_agent = base_agents.EvaluationAgent(
+product_manager_evaluation_agent = base_agents. EvaluationAgent(
     base_url=base_url,
     openai_api_key=openai_api_key,
     persona=persona_product_manager_eval,
@@ -216,7 +216,7 @@ print("\n*** Workflow execution started ***\n")
 workflow_prompt = "What would the development tasks for this product be?"
 # ****
 print(f"Task to complete in this workflow, workflow prompt = {workflow_prompt}")
-
+ 
 print("\nDefining workflow steps from the workflow prompt")
 # TODO: 12 - Implement the workflow.
 #   1. Use the 'action_planning_agent' to extract steps from the 'workflow_prompt'.

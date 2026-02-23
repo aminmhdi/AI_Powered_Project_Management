@@ -1,0 +1,4 @@
+Testing DirectPromptAgent...
+Prompt: What is the Capital of France?
+Response: The capital of France is Paris.
+The DirectPromptAgent used its built-in knowledge of world capitals to generate the response.
