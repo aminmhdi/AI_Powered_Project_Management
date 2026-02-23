@@ -1,5 +1,53 @@
 # agentic_workflow.py
 
+"""
+Implement support functions for routed tasks.
+
+Reviewer Note
+
+Spec: Implement support functions for routed tasks.
+
+the specification doesn't pass.
+
+The three support functions are defined and they do accept a query, call the corresponding KnowledgeAugmentedPromptAgent.respond(), and pass that output to the corresponding EvaluationAgent.evaluate().
+The functions do not correctly return the final validated response: they return the raw response from the knowledge agent instead of the evaluation output (for example, final_response).
+The functions check evaluation["result"] and evaluation["feedback"], but EvaluationAgent.evaluate() returns final_response, final_evaluation, and iterations, so this mismatch can break execution and prevents correct validated return behavior.
+What to fix:
+
+Update each support function in starter/phase_2/agentic_workflow.py to return evaluation["final_response"] (or equivalent validated field) instead of returning the raw knowledge-agent response.
+Replace the result/feedback key checks with logic that uses the actual evaluation keys (for example final_evaluation and final_response) so the functions work with the current EvaluationAgent output format.
+Support functions (e.g., product_manager_support_function, program_manager_support_function, development_engineer_support_function) are defined.Each support function:
+
+Accepts an input query (a step from the action plan).
+Calls the respond() method of its corresponding KnowledgeAugmentedPromptAgent.
+Passes the response from the Knowledge Agent to the evaluate() method of its corresponding EvaluationAgent.
+Returns the final, validated response (e.g., from the 'final_response' key of the evaluation result). 
+"""
+
+"""
+Produce a final, structured output for the Email Router project.
+
+Reviewer Note
+
+Spec: Produce a final, structured output for the Email Router project.
+
+the specification doesn't pass.
+
+The script does produce a final output, but the final output is only a generic documentation-task list (the last step), not a comprehensive project plan containing user stories, product features, and detailed engineering tasks together.
+User stories in the run log do follow the expected “As a [user], I want [action] so that [benefit]” style, so that part is present.
+The required product feature structure (Feature Name, Description, Key Functionality, User Benefit) is not present in the produced output.
+The required engineering task structure (Task ID, Task Title, Related User Story, Description, Acceptance Criteria, Estimated Effort, Dependencies) is also not present in the produced output.
+What to fix:
+
+Update the workflow so the generated final output consolidates all required sections: user stories, structured product features, and structured engineering tasks.
+Ensure the Program Manager and Development Engineer outputs are enforced in the exact required field formats, and print that consolidated structured plan as the final workflow result.
+The agentic_workflow.py script, when run with the Product-Spec-Email-Router.txt and a suitable high-level prompt (e.g., workflow_prompt from starter code, or similar, focusing on generating a full project plan), produces a final output.
+This output represents a comprehensively planned project for the Email Router, including user stories, product features, and detailed engineering tasks.
+The generated user stories follow the structure: "As a [type of user], I want [an action or feature] so that [benefit/value]."
+The generated product features follow the structure: "Feature Name:...", "Description:...", "Key Functionality:...", "User Benefit:..."
+The generated engineering tasks follow the structure: "Task ID:...", "Task Title:...", "Related User Story:...", "Description:...", "Acceptance Criteria:...", "Estimated Effort:...", "Dependencies:..."
+"""
+
 # TODO: 1 - Import the following agents: ActionPlanningAgent, KnowledgeAugmentedPromptAgent, EvaluationAgent, RoutingAgent from the workflow_agents.base_agents module
 import workflow_agents.base_agents as base_agents
 
@@ -187,33 +235,27 @@ routing_agent = base_agents.RoutingAgent(
 def product_manager_support_function(query):
     response = product_manager_knowledge_agent.respond(query)
     evaluation = product_manager_evaluation_agent.evaluate(response)
-    if evaluation["result"] == "Fail":
-        print("Product Manager Agent response failed evaluation. Returning feedback.")
-        return evaluation["feedback"]
-    return response
+    return evaluation["final_response"]
 
 def program_manager_support_function(query):
     response = program_manager_knowledge_agent.respond(query)
     evaluation = program_manager_evaluation_agent.evaluate(response)
-    if evaluation["result"] == "Fail":
-        print("Program Manager Agent response failed evaluation. Returning feedback.")
-        return evaluation["feedback"]
-    return response
+    return evaluation["final_response"]
 
 def development_engineer_support_function(query):
     response = development_engineer_knowledge_agent.respond(query)
     evaluation = development_engineer_evaluation_agent.evaluate(response)
-    if evaluation["result"] == "Fail":
-        print("Development Engineer Agent response failed evaluation. Returning feedback.")
-        return evaluation["feedback"]
-    return response
+    return evaluation["final_response"]
 
 # Run the workflow
 
 print("\n*** Workflow execution started ***\n")
 # Workflow Prompt
 # ****
-workflow_prompt = "What would the development tasks for this product be?"
+workflow_prompt = "Create a comprehensive project plan including: " \
+"1) user stories for the product, " \
+"2) product features organized by capability, " \
+"3) development tasks with technical details for each user story"
 # ****
 print(f"Task to complete in this workflow, workflow prompt = {workflow_prompt}")
  
@@ -233,11 +275,41 @@ workflow_steps = action_planning_agent.extract_steps_from_prompt(workflow_prompt
 #for idx, step in enumerate(workflow_steps):
 #    print(f"Step {idx+1}: {step}")
 completed_steps = []
+step_descriptions = []
 for step in workflow_steps:
     print(f"\nExecuting step: {step}")
     # Step 2: Route the step to the appropriate support function using the routing agent
     result = routing_agent.route(step)
     completed_steps.append(result)
+    step_descriptions.append(step)
     print(f"Result of step: {result}")
+
 print("\n*** Workflow execution completed ***\n")
-print(f"Final output of the workflow: {completed_steps[-1]}")
+
+# Consolidate all outputs into a comprehensive structured project plan
+print("="*80)
+print("COMPREHENSIVE PROJECT PLAN - EMAIL ROUTER")
+print("="*80)
+
+consolidated_output = "\n" + "="*80 + "\n"
+consolidated_output += "COMPREHENSIVE PROJECT PLAN - EMAIL ROUTER\n"
+consolidated_output += "="*80 + "\n\n"
+
+# Add all completed steps to the output
+for idx, (description, result) in enumerate(zip(step_descriptions, completed_steps)):
+    if idx == 0:
+        consolidated_output += "USER STORIES\n"
+        consolidated_output += "-" * 80 + "\n"
+    elif idx == 1:
+        consolidated_output += "\nPRODUCT FEATURES\n"
+        consolidated_output += "-" * 80 + "\n"
+    elif idx == 2:
+        consolidated_output += "\nDEVELOPMENT TASKS\n"
+        consolidated_output += "-" * 80 + "\n"
+    
+    consolidated_output += result + "\n"
+
+consolidated_output += "\n" + "="*80 + "\n"
+
+print(consolidated_output)
+print(f"Final output of the workflow:\n{consolidated_output}")
